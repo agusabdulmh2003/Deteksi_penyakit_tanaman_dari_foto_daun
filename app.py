@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 import os
 
-# Load model yang sudah dilatih
+# Load model
 model_path = "leaf_disease_model.h5"
 
 if not os.path.exists(model_path):
@@ -13,9 +13,14 @@ if not os.path.exists(model_path):
     st.stop()
 
 model = load_model(model_path)
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Definisikan kelas penyakit berdasarkan folder dataset
 train_img_dir = "dataset/train/img"
+if not os.path.exists(train_img_dir):
+    st.error("Folder dataset tidak ditemukan! Pastikan path dataset sudah benar.")
+    st.stop()
+
 class_names = sorted(os.listdir(train_img_dir))
 
 # Fungsi untuk preprocessing gambar
